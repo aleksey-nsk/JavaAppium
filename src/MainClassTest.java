@@ -27,14 +27,28 @@ public class MainClassTest {
     Assert.assertEquals(expectedResult, actualResult);
   }
 
+//  @Test
+//  public void testGetClassNumber() {
+//    System.out.println("Get Class Number Test");
+//
+//    final MainClass mainClassObject = new MainClass();
+//    final int result = mainClassObject.getClassNumber();
+//    System.out.println("result: " + result);
+//
+//    Assert.assertTrue("Результат не превосходит 45", result > 45);
+//  }
+
   @Test
-  public void testGetClassNumber() {
-    System.out.println("Get Class Number Test");
+  public void testGetClassString() {
+    System.out.println("Get Class String Test");
 
     final MainClass mainClassObject = new MainClass();
-    final int result = mainClassObject.getClassNumber();
-    System.out.println("result: " + result);
+    final String str = mainClassObject.getClassString();
+    System.out.println("str: " + str);
 
-    Assert.assertTrue("Результат не превосходит 45", result > 45);
+    final boolean substringIsPresent = str.contains("hello") || str.contains("Hello");
+    System.out.println("substringIsPresent: " + substringIsPresent);
+
+    Assert.assertTrue("Строка не содержит подстроку 'hello' или 'Hello'", substringIsPresent);
   }
 }
