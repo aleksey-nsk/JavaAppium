@@ -7,6 +7,7 @@ public class MainClassTest {
 
   @Before
   public void textStartTest() {
+    System.out.println();
     System.out.println("Start Test");
   }
 
@@ -24,5 +25,16 @@ public class MainClassTest {
     final int expectedResult = 14;
 
     Assert.assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  public void testGetClassNumber() {
+    System.out.println("Get Class Number Test");
+
+    final MainClass mainClassObject = new MainClass();
+    final int result = mainClassObject.getClassNumber();
+    System.out.println("result: " + result);
+
+    Assert.assertTrue("Результат не превосходит 45", result > 45);
   }
 }
