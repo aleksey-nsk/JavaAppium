@@ -108,6 +108,36 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testCheckWordInSearch() {
+    System.out.print("\n\n***** Внутри метода testCheckWordInSearch() *****\n\n");
+
+    waitForElementAndClick(
+        By.id("org.wikipedia:id/search_container"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    final String searchWord = "Java";
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        searchWord,
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementPresent(
+        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']"),
+        "Не дождались элемента, содержащего список результатов поиска"
+    );
+
+    checkWordInSearch(
+        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+        searchWord
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -153,6 +183,18 @@ public class FirstTest {
     int resultAmount = elements.size();
     System.out.println("resultAmount: " + resultAmount);
     Assert.assertTrue("Не удалось получить несколько элементов", resultAmount > 1);
+  }
+
+  private void checkWordInSearch(By locator, String word) {
+    System.out.println("Убедимся, что во всех элементах, найденных по локатору: '" + locator + "', присутствует слово: '" + word + "'");
+    List<WebElement> elements = driver.findElements(locator);
+    for (WebElement element : elements) {
+      String textInElement = element.getAttribute("text");
+      System.out.println("  textInElement: " + textInElement);
+      if (!textInElement.contains(word)) {
+        throw new AssertionError("Текст текущего элемента не содержит слово '" + word + "'");
+      }
+    }
   }
 
   private boolean waitForElementNotPresent(By locator, String errorMessage, long timeoutInSeconds) {
