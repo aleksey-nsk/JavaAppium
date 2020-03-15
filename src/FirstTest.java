@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -68,6 +69,45 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testCancelSearch() {
+    System.out.print("\n\n***** Внутри метода testCancelSearch() *****\n\n");
+
+    waitForElementAndClick(
+        By.id("org.wikipedia:id/search_container"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        "Java",
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementPresent(
+        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']"),
+        "Не дождались элемента, содержащего список результатов поиска"
+    );
+
+    checkResultAmountOfElements(
+        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']")
+    );
+
+    waitForElementAndClick(
+        By.id("org.wikipedia:id/search_close_btn"),
+        "Can not find 'X' to cancel search",
+        5
+    );
+
+    waitForElementNotPresent(
+        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']"),
+        "Элемент, содержащий список результатов поиска, всё ещё присутствует на странице",
+        10
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -88,9 +128,9 @@ public class FirstTest {
     return element;
   }
 
-  private WebElement waitForElementAndSendKeys(By locator, String value, String error_message, long timeoutInSeconds) {
+  private WebElement waitForElementAndSendKeys(By locator, String value, String errorMessage, long timeoutInSeconds) {
     System.out.println("Дождаться элемент, и ввести в него значение");
-    WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
+    WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
     System.out.println("Ввести в элемент значение: '" + value + "'");
     element.sendKeys(value);
     return element;
@@ -105,5 +145,20 @@ public class FirstTest {
     System.out.println("Проверить наличие в элементе текста: '" + expectedTextInElement + "'");
     String actualTextInElement = element.getAttribute("text");
     Assert.assertEquals("Элемент содержит неверный текст", expectedTextInElement, actualTextInElement);
+  }
+
+  private void checkResultAmountOfElements(By locator) {
+    System.out.println("Убедимся, что найдено несколько элементов по локатору: '" + locator + "'");
+    List<WebElement> elements = driver.findElements(locator);
+    int resultAmount = elements.size();
+    System.out.println("resultAmount: " + resultAmount);
+    Assert.assertTrue("Не удалось получить несколько элементов", resultAmount > 1);
+  }
+
+  private boolean waitForElementNotPresent(By locator, String errorMessage, long timeoutInSeconds) {
+    System.out.println("Дождёмся отсутствия на странице элемента: locator = '" + locator + "', таймаут = " + timeoutInSeconds + " секунд");
+    WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+    wait.withMessage(errorMessage + "\n");
+    return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
   }
 }
