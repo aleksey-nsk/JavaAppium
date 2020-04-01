@@ -176,6 +176,114 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void saveFirstArticleToMyList() {
+    System.out.print("\n\n***** Внутри метода saveFirstArticleToMyList() *****\n\n");
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        "Java",
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        "Can not find 'Object-oriented programming language' topic, searching by 'Java'",
+        5
+    );
+
+    waitForElementPresent(
+        By.id("org.wikipedia:id/view_page_title_text"),
+        "Can not find article title",
+        15
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageView']"),
+        "Can not find button to open article options",
+        5
+    );
+
+    waitForElementPresent(
+        By.xpath("//*[@class='android.widget.FrameLayout']/*[@class='android.widget.ListView']"),
+        "Не дождались контейнер, содержащий пункты меню"
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@text='Add to reading list']"),
+        "Can not find option to add article to reading list",
+        5
+    );
+
+    waitForElementAndClick(
+        By.id("org.wikipedia:id/onboarding_button"),
+        "Can not find 'Got it' tip overlay",
+        5
+    );
+
+    waitForElementAndClear(
+        By.id("org.wikipedia:id/text_input"),
+        "Can not find input to set name of articles folder",
+        5
+    );
+
+    final String nameOfFolder = "Learning programming";
+
+    waitForElementAndSendKeys(
+        By.id("org.wikipedia:id/text_input"),
+        nameOfFolder,
+        "Can not put text into articles folder input",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@text='OK']"),
+        "Can not press OK button",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_toolbar']/*[@class='android.widget.ImageButton']"),
+        "Can not close article, can not find X link",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/fragment_main_nav_tab_layout']//*[@content-desc='My lists']"),
+        "Can not find navigation button to My list",
+        5
+    );
+
+    waitForElementPresent(
+        By.xpath("//*[@resource-id='org.wikipedia:id/reading_list_list']"),
+        "Не дождались контейнер, содержащий папки с сохранёнными статьями"
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@text='" + nameOfFolder + "']"),
+        "Can not find created folder",
+        5
+    );
+
+    swipeElementToLeft(
+        By.xpath("//*[@text='Java (programming language)']"),
+        "Can not find saved article"
+    );
+
+    waitForElementNotPresent(
+        By.xpath("//*[@text='Java (programming language)']"),
+        "Can not delete saved article",
+        5
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -259,7 +367,12 @@ public class FirstTest {
     System.out.println("  x: " + x);
     System.out.println("  start_y: " + start_y);
     System.out.println("  end_y: " + end_y);
-    action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+    action
+        .press(x, start_y)
+        .waitAction(timeOfSwipe)
+        .moveTo(x, end_y)
+        .release()
+        .perform();
   }
 
   protected void swipeUpQuick() {
@@ -278,5 +391,30 @@ public class FirstTest {
       swipeUpQuick();
       alreadySwiped++;
     }
+  }
+
+  protected void swipeElementToLeft(By locator, String errorMessage) {
+    System.out.println("Свайп по элементу влево");
+
+    WebElement element = waitForElementPresent(locator, errorMessage, 10);
+    System.out.println("Элемент получен. Вычисляем необходимые координаты");
+    int left_x = element.getLocation().getX();
+    int right_x = left_x + element.getSize().getWidth();
+    int upper_y = element.getLocation().getY();
+    int lower_y = upper_y + element.getSize().getHeight();
+    int middle_y = (upper_y + lower_y) / 2;
+    System.out.println("  left_x: " + left_x);
+    System.out.println("  right_x: " + right_x);
+    System.out.println("  upper_y: " + upper_y);
+    System.out.println("  lower_y: " + lower_y);
+    System.out.println("  middle_y: " + middle_y);
+
+    TouchAction action = new TouchAction(driver);
+    action
+        .press(right_x, middle_y)
+        .waitAction(1000)
+        .moveTo(left_x, middle_y)
+        .release()
+        .perform();
   }
 }
