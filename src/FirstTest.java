@@ -415,6 +415,41 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testCheckSearchArticleInBackground() {
+    System.out.print("\n\n***** Внутри метода testCheckSearchArticleInBackground() *****\n\n");
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    final String searchLine = "Java";
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        searchLine,
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementPresent(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        "Can not find 'Object-oriented programming language' topic, searching by '" + searchLine + "'",
+        5
+    );
+
+    // Отослать приложение в background
+    driver.runAppInBackground(5);
+
+    waitForElementPresent(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        "Can not find article after returning from background",
+        5
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
