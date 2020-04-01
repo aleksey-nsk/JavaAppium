@@ -1,10 +1,12 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -138,6 +140,41 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testSwipeArticle() {
+    System.out.print("\n\n***** Внутри метода testSwipeArticle() *****\n\n");
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        "Java",
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        "Can not find 'Object-oriented programming language' topic, searching by 'Java'",
+        5
+    );
+
+    waitForElementPresent(
+        By.id("org.wikipedia:id/view_page_title_text"),
+        "Can not find article title",
+        15
+    );
+
+    // Сделаем свайп несколько раз
+    swipeUp(2000);
+    swipeUp(2000);
+    swipeUp(2000);
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -202,5 +239,25 @@ public class FirstTest {
     WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
     wait.withMessage(errorMessage + "\n");
     return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+  }
+
+  private WebElement waitForElementAndClear(By locator, String errorMessage, long timeoutInSeconds) {
+    System.out.println("Дождаться элемент, и очистить его");
+    WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
+    element.clear();
+    return element;
+  }
+
+  protected void swipeUp(int timeOfSwipe) {
+    System.out.println("Простой свайп по экрану снизу вверх");
+    TouchAction action = new TouchAction(driver);
+    Dimension size = driver.manage().window().getSize(); // определить размеры экрана
+    int x = size.width / 2;
+    int start_y = (int) (size.height * 0.8);
+    int end_y = (int) (size.height * 0.2);
+    System.out.println("  x: " + x);
+    System.out.println("  start_y: " + start_y);
+    System.out.println("  end_y: " + end_y);
+    action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
   }
 }
