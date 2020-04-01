@@ -152,14 +152,14 @@ public class FirstTest {
 
     waitForElementAndSendKeys(
         By.xpath("//*[contains(@text, 'Search…')]"),
-        "Java",
+        "Appium",
         "Can not find 'Search…' input",
         5
     );
 
     waitForElementAndClick(
-        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-        "Can not find 'Object-oriented programming language' topic, searching by 'Java'",
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Appium']"),
+        "Can not find 'Appium' topic",
         5
     );
 
@@ -169,10 +169,11 @@ public class FirstTest {
         15
     );
 
-    // Сделаем свайп несколько раз
-    swipeUp(2000);
-    swipeUp(2000);
-    swipeUp(2000);
+    swipeUpToFindElement(
+        By.xpath("//*[@text='View page in browser']"),
+        "Can not find the end of the article",
+        20
+    );
   }
 
   private WebElement waitForElementPresent(By locator, String errorMessage) {
@@ -259,5 +260,23 @@ public class FirstTest {
     System.out.println("  start_y: " + start_y);
     System.out.println("  end_y: " + end_y);
     action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+  }
+
+  protected void swipeUpQuick() {
+    System.out.println("Метод для быстрого свайпа вверх");
+    swipeUp(200);
+  }
+
+  protected void swipeUpToFindElement(By locator, String errorMessage, int maxSwipes) {
+    System.out.println("Свайпать, пока не достигнем элемента с локатором: '" + locator + "'");
+    int alreadySwiped = 0;
+    while (driver.findElements(locator).size() == 0) {
+      if (alreadySwiped > maxSwipes) {
+        waitForElementPresent(locator, "Can not find element by swipimg up. \n" + errorMessage, 0);
+        return;
+      }
+      swipeUpQuick();
+      alreadySwiped++;
+    }
   }
 }
