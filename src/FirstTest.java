@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -349,6 +350,71 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testChangeScreenOrientationOnSearchResults() {
+    System.out.print("\n\n***** Внутри метода testChangeScreenOrientationOnSearchResults() *****\n\n");
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    final String searchLine = "Java";
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        searchLine,
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        "Can not find 'Object-oriented programming language' topic, searching by '" + searchLine + "'",
+        15
+    );
+
+    final String titleBeforeRotation = waitForElementAndGetAttribute(
+        By.id("org.wikipedia:id/view_page_title_text"),
+        "text",
+        "Can not find title of article",
+        15
+    );
+
+    // Поворачиваем экран телефона
+    driver.rotate(ScreenOrientation.LANDSCAPE);
+
+    final String titleAfterRotation = waitForElementAndGetAttribute(
+        By.id("org.wikipedia:id/view_page_title_text"),
+        "text",
+        "Can not find title of article",
+        15
+    );
+
+    Assert.assertEquals(
+        "Article title have been changed after screen rotation",
+        titleBeforeRotation,
+        titleAfterRotation
+    );
+
+    // Поворачиваем экран телефона
+    driver.rotate(ScreenOrientation.PORTRAIT);
+
+    final String titleAfterSecondRotation = waitForElementAndGetAttribute(
+        By.id("org.wikipedia:id/view_page_title_text"),
+        "text",
+        "Can not find title of article",
+        15
+    );
+
+    Assert.assertEquals(
+        "Article title have been changed after screen rotation",
+        titleBeforeRotation,
+        titleAfterSecondRotation
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -500,5 +566,13 @@ public class FirstTest {
     } else {
       System.out.println("Проверка успешна. Элементов нет");
     }
+  }
+
+  private String waitForElementAndGetAttribute(By locator, String attribute, String errorMessage, long timeoutInSeconds) {
+    System.out.println("Найдём элемент, затем получим значение его атрибуты: '" + attribute + "'");
+    WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
+    String attributeValue = element.getAttribute(attribute);
+    System.out.println("attributeValue: '" + attributeValue + "'");
+    return attributeValue;
   }
 }
