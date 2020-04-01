@@ -284,6 +284,38 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testAmountOfNotEmptySearch() {
+    System.out.print("\n\n***** Внутри метода testAmountOfNotEmptySearch() *****\n\n");
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    final String searchLine = "Linkin park discography";
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        searchLine,
+        "Can not find 'Search…' input",
+        5
+    );
+
+    final String searchResultLocator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
+
+    waitForElementPresent(
+        By.xpath(searchResultLocator),
+        "Can not find anything by the request: '" + searchLine + "'",
+        15
+    );
+
+    int amountOfSearchResults = getAmountOfElements(By.xpath(searchResultLocator));
+
+    Assert.assertTrue("We found too few results", amountOfSearchResults > 0);
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -416,5 +448,13 @@ public class FirstTest {
         .moveTo(left_x, middle_y)
         .release()
         .perform();
+  }
+
+  private int getAmountOfElements(By locator) {
+    System.out.println("Определим количество элементов, найденных по локатору: '" + locator + "'");
+    List elements = driver.findElements(locator);
+    final int amountOfElements = elements.size();
+    System.out.println("  amountOfElements: " + amountOfElements);
+    return amountOfElements;
   }
 }
