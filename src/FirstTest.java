@@ -316,6 +316,39 @@ public class FirstTest {
     Assert.assertTrue("We found too few results", amountOfSearchResults > 0);
   }
 
+  @Test
+  public void testAmountOfEmptySearch() {
+    System.out.print("\n\n***** Внутри метода testAmountOfEmptySearch() *****\n\n");
+
+    final String searchLine = "kflkdjjklfnhj";
+    final String emptyResultLabel = "//*[@text='No results found']";
+    final String searchResultLocator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        searchLine,
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementPresent(
+        By.xpath(emptyResultLabel),
+        "Can not find empty result label by the request: '" + searchLine + "'",
+        15
+    );
+
+    assertElementNotPresent(
+        By.xpath(searchResultLocator),
+        "We have found some results by request: '" + searchLine + "'"
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -456,5 +489,16 @@ public class FirstTest {
     final int amountOfElements = elements.size();
     System.out.println("  amountOfElements: " + amountOfElements);
     return amountOfElements;
+  }
+
+  private void assertElementNotPresent(By locator, String errorMessage) {
+    System.out.println("Убедимся, что элементов нет");
+    final int amountOfElements = getAmountOfElements(locator);
+    if (amountOfElements > 0) {
+      final String defaultMessage = "An element '" + locator.toString() + "' supposed to be not present.";
+      throw new AssertionError(defaultMessage + " " + errorMessage);
+    } else {
+      System.out.println("Проверка успешна. Элементов нет");
+    }
   }
 }
