@@ -43,6 +43,11 @@ public class FirstTest {
   @After
   public void tearDown() {
     System.out.print("\n\n***** Внутри метода tearDown() *****\n\n");
+
+    System.out.println("Поворачиваем экран телефона в портретный режим");
+    driver.rotate(ScreenOrientation.PORTRAIT);
+
+    System.out.println("Вызываем метод quit()");
     driver.quit();
   }
 
