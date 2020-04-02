@@ -645,6 +645,39 @@ public class FirstTest {
     );
   }
 
+  @Test
+  public void testAssertTitle() {
+    System.out.print("\n\n***** Внутри метода testAssertTitle() *****\n\n");
+
+    waitForElementAndClick(
+        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+        "Can not find 'Search Wikipedia' input",
+        5
+    );
+
+    final String searchLine = "Java";
+
+    waitForElementAndSendKeys(
+        By.xpath("//*[contains(@text, 'Search…')]"),
+        searchLine,
+        "Can not find 'Search…' input",
+        5
+    );
+
+    waitForElementAndClick(
+        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+        "Can not find 'Object-oriented programming language' topic, searching by '" + searchLine + "'",
+        15
+    );
+
+    final String titleLocator = "//*[@resource-id='org.wikipedia:id/view_page_header_container']/*[@resource-id='org.wikipedia:id/view_page_title_text']";
+
+    assertElementPresent(
+        By.xpath(titleLocator),
+        "У статьи отсутствует элемент title"
+    );
+  }
+
   private WebElement waitForElementPresent(By locator, String errorMessage) {
     return waitForElementPresent(locator, errorMessage, 5);
   }
@@ -804,5 +837,16 @@ public class FirstTest {
     String attributeValue = element.getAttribute(attribute);
     System.out.println("attributeValue: '" + attributeValue + "'");
     return attributeValue;
+  }
+
+  private void assertElementPresent(By locator, String errorMessage) {
+    System.out.println("Убедимся, что элемент присутствует");
+    final int amountOfElements = getAmountOfElements(locator);
+    if (amountOfElements > 0) {
+      System.out.println("Проверка успешна. Элемент присутствует");
+    } else {
+      final String defaultMessage = "По локатору '" + locator.toString() + "' элемент не найден.";
+      throw new AssertionError(defaultMessage + " " + errorMessage);
+    }
   }
 }
