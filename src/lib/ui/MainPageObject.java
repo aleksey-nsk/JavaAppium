@@ -23,7 +23,7 @@ public class MainPageObject {
   }
 
   public WebElement waitForElementPresent(By locator, String errorMessage, long timeoutInSeconds) {
-    System.out.println("Дождаться элемент: locator = '" + locator + "', таймаут = " + timeoutInSeconds + " секунд");
+    System.out.println("  Дождаться элемент: locator = '" + locator + "', таймаут = " + timeoutInSeconds + " секунд");
     WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
     wait.withMessage(errorMessage + "\n");
     WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -31,17 +31,17 @@ public class MainPageObject {
   }
 
   public WebElement waitForElementAndClick(By locator, String errorMessage, long timeoutInSeconds) {
-    System.out.println("Дождаться элемент, и кликнуть по нему");
+    System.out.println("  Дождаться элемент, и кликнуть по нему");
     WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
-    System.out.println("Кликнуть по элементу");
+    System.out.println("  Кликнуть по элементу");
     element.click();
     return element;
   }
 
   public WebElement waitForElementAndSendKeys(By locator, String value, String errorMessage, long timeoutInSeconds) {
-    System.out.println("Дождаться элемент, и ввести в него значение");
+    System.out.println("  Дождаться элемент, и ввести в него значение");
     WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
-    System.out.println("Ввести в элемент значение: '" + value + "'");
+    System.out.println("  Ввести в элемент значение: '" + value + "'");
     element.sendKeys(value);
     return element;
   }

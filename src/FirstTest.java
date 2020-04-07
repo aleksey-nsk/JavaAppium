@@ -1,10 +1,10 @@
 import lib.CoreTestCase;
 import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.WebElement;
 
 public class FirstTest extends CoreTestCase {
 
@@ -17,33 +17,16 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testSearch() {
-    System.out.print("\n\n***** Внутри метода testSearch() *****\n\n");
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-        "Can not find 'Search Wikipedia' input",
-        5
-    );
-
-    WebElement searchField = mainPageObject.waitForElementPresent(
-        By.id("org.wikipedia:id/search_src_text"),
-        "Can not find search field"
-    );
-
-    mainPageObject.checkTextInElement(searchField, "Search…");
-
-    mainPageObject.sendKeysInElement(searchField, "Java");
-
-    mainPageObject.waitForElementPresent(
-        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-        "Can not find 'Object-oriented programming language' topic, searching by 'Java'",
-        15
-    );
+    System.out.print("\n\n***** Внутри метода testSearch() *****\n");
+    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    searchPageObject.initSearchInput();
+    searchPageObject.typeSearchLine("Java");
+    searchPageObject.waitForSearchResult("Object-oriented programming language");
   }
 
   @Test
   public void testCancelSearch() {
-    System.out.print("\n\n***** Внутри метода testCancelSearch() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testCancelSearch() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.id("org.wikipedia:id/search_container"),
@@ -82,7 +65,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testCheckWordInSearch() {
-    System.out.print("\n\n***** Внутри метода testCheckWordInSearch() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testCheckWordInSearch() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.id("org.wikipedia:id/search_container"),
@@ -112,7 +95,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testSwipeArticle() {
-    System.out.print("\n\n***** Внутри метода testSwipeArticle() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testSwipeArticle() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -148,7 +131,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testSaveFirstArticleToMyList() {
-    System.out.print("\n\n***** Внутри метода testSaveFirstArticleToMyList() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testSaveFirstArticleToMyList() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -256,7 +239,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testAmountOfNotEmptySearch() {
-    System.out.print("\n\n***** Внутри метода testAmountOfNotEmptySearch() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testAmountOfNotEmptySearch() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -288,7 +271,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testAmountOfEmptySearch() {
-    System.out.print("\n\n***** Внутри метода testAmountOfEmptySearch() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testAmountOfEmptySearch() *****\n");
 
     final String searchLine = "kflkdjjklfnhj";
     final String emptyResultLabel = "//*[@text='No results found']";
@@ -321,7 +304,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testChangeScreenOrientationOnSearchResults() {
-    System.out.print("\n\n***** Внутри метода testChangeScreenOrientationOnSearchResults() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testChangeScreenOrientationOnSearchResults() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -386,7 +369,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testCheckSearchArticleInBackground() {
-    System.out.print("\n\n***** Внутри метода testCheckSearchArticleInBackground() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testCheckSearchArticleInBackground() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -421,7 +404,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testSaveTwoArticles() {
-    System.out.print("\n\n***** Внутри метода testSaveTwoArticles() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testSaveTwoArticles() *****\n");
 
     final String searchLine = "Java";
     final String firstArticleTitle = "Java (programming language)";
@@ -616,7 +599,7 @@ public class FirstTest extends CoreTestCase {
 
   @Test
   public void testAssertTitle() {
-    System.out.print("\n\n***** Внутри метода testAssertTitle() *****\n\n");
+    System.out.print("\n\n***** Внутри метода testAssertTitle() *****\n");
 
     mainPageObject.waitForElementAndClick(
         By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
