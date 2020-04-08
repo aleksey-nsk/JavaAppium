@@ -33,18 +33,35 @@ public class CoreTestCase extends TestCase {
     capabilities.setCapability("app", path);
 
     driver = new AndroidDriver(new URL(AppiumURL), capabilities);
+
+    this.rotateScreenPortrait();
   }
 
   @Override
   protected void tearDown() throws Exception {
-    System.out.print("\n\n***** Метод tearDown() *****\n\n");
+    System.out.print("\n\n***** Метод tearDown() *****\n");
 
-    System.out.println("Поворачиваем экран телефона в портретный режим");
-    driver.rotate(ScreenOrientation.PORTRAIT);
+    this.rotateScreenPortrait();
 
     System.out.println("Вызываем метод quit()");
     driver.quit();
 
     super.tearDown();
+  }
+
+  protected void rotateScreenPortrait() {
+    System.out.println("\nRotate Screen Portrait");
+    driver.rotate(ScreenOrientation.PORTRAIT);
+  }
+
+  protected void rotateScreenLandscape() {
+    System.out.println("\nRotate Screen Landscape");
+    driver.rotate(ScreenOrientation.LANDSCAPE);
+  }
+
+  protected void backgroundApp(int seconds) {
+    System.out.println("\nBackground App");
+    System.out.println("  seconds: " + seconds);
+    driver.runAppInBackground(seconds);
   }
 }
