@@ -92,15 +92,15 @@ public class MainPageObject {
   }
 
   public void swipeUp(int timeOfSwipe) {
-    System.out.println("Простой свайп по экрану снизу вверх");
+    System.out.println("  Простой свайп по экрану снизу вверх");
     TouchAction action = new TouchAction(driver);
     Dimension size = driver.manage().window().getSize(); // определить размеры экрана
     int x = size.width / 2;
     int start_y = (int) (size.height * 0.8);
     int end_y = (int) (size.height * 0.2);
-    System.out.println("  x: " + x);
-    System.out.println("  start_y: " + start_y);
-    System.out.println("  end_y: " + end_y);
+    System.out.println("    x: " + x);
+    System.out.println("    start_y: " + start_y);
+    System.out.println("    end_y: " + end_y);
     action
         .press(x, start_y)
         .waitAction(timeOfSwipe)
@@ -110,12 +110,13 @@ public class MainPageObject {
   }
 
   public void swipeUpQuick() {
-    System.out.println("Метод для быстрого свайпа вверх");
+    System.out.println();
+    System.out.println("  Метод для быстрого свайпа вверх");
     swipeUp(200);
   }
 
   public void swipeUpToFindElement(By locator, String errorMessage, int maxSwipes) {
-    System.out.println("Свайпать, пока не достигнем элемента с локатором: '" + locator + "'");
+    System.out.println("  Свайпать, пока не достигнем элемента с локатором: '" + locator + "'");
     int alreadySwiped = 0;
     while (driver.findElements(locator).size() == 0) {
       if (alreadySwiped > maxSwipes) {

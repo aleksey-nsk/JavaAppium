@@ -15,7 +15,7 @@ public class CoreTestCase extends TestCase {
 
   @Override
   protected void setUp() throws Exception {
-    System.out.print("\n\n***** Внутри метода setUp() *****\n\n");
+    System.out.print("\n\n***** Метод setUp() *****\n\n");
 
     super.setUp();
 
@@ -37,7 +37,7 @@ public class CoreTestCase extends TestCase {
 
   @Override
   protected void tearDown() throws Exception {
-    System.out.print("\n\n***** Внутри метода tearDown() *****\n\n");
+    System.out.print("\n\n***** Метод tearDown() *****\n\n");
 
     System.out.println("Поворачиваем экран телефона в портретный режим");
     driver.rotate(ScreenOrientation.PORTRAIT);
