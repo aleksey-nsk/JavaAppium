@@ -78,14 +78,14 @@ public class MainPageObject {
   }
 
   public boolean waitForElementNotPresent(By locator, String errorMessage, long timeoutInSeconds) {
-    System.out.println("Дождёмся отсутствия на странице элемента: locator = '" + locator + "', таймаут = " + timeoutInSeconds + " секунд");
+    System.out.println("  Дождёмся отсутствия на странице элемента: locator = '" + locator + "', таймаут = " + timeoutInSeconds + " секунд");
     WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
     wait.withMessage(errorMessage + "\n");
     return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
   }
 
   public WebElement waitForElementAndClear(By locator, String errorMessage, long timeoutInSeconds) {
-    System.out.println("Дождаться элемент, и очистить его");
+    System.out.println("  Дождаться элемент, и очистить его");
     WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
     element.clear();
     return element;

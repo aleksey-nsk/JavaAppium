@@ -27,40 +27,13 @@ public class FirstTest extends CoreTestCase {
   @Test
   public void testCancelSearch() {
     System.out.print("\n\n***** Внутри метода testCancelSearch() *****\n");
-
-    mainPageObject.waitForElementAndClick(
-        By.id("org.wikipedia:id/search_container"),
-        "Can not find 'Search Wikipedia' input",
-        5
-    );
-
-    mainPageObject.waitForElementAndSendKeys(
-        By.xpath("//*[contains(@text, 'Search…')]"),
-        "Java",
-        "Can not find 'Search…' input",
-        5
-    );
-
-    mainPageObject.waitForElementPresent(
-        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']"),
-        "Не дождались элемента, содержащего список результатов поиска"
-    );
-
-    mainPageObject.checkResultAmountOfElements(
-        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']")
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.id("org.wikipedia:id/search_close_btn"),
-        "Can not find 'X' to cancel search",
-        5
-    );
-
-    mainPageObject.waitForElementNotPresent(
-        By.xpath("//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']"),
-        "Элемент, содержащий список результатов поиска, всё ещё присутствует на странице",
-        15
-    );
+    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    searchPageObject.initSearchInput();
+    searchPageObject.typeSearchLine("Java");
+    searchPageObject.clearSearchField();
+    searchPageObject.waitForCancelButtonToAppear();
+    searchPageObject.clickCancelButton();
+    searchPageObject.waitForCancelButtonToDisappear();
   }
 
   @Test
