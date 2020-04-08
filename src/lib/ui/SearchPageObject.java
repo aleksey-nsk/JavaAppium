@@ -31,6 +31,7 @@ public class SearchPageObject extends MainPageObject {
 
   public void typeSearchLine(String searchLine) {
     System.out.println("\nType Search Line");
+    System.out.println("  searchLine: '" + searchLine + "'");
     this.waitForElementAndSendKeys(By.xpath(SEARCH_INPUT), searchLine, "Can not find and send keys into 'Search…' input", 5);
   }
 
@@ -42,6 +43,7 @@ public class SearchPageObject extends MainPageObject {
 
   public void clickByArticleWithSubstring(String substring) {
     System.out.println("\nClick By Article With Substring");
+    System.out.println("  substring: '" + substring + "'");
     String searchResultXpath = getSearchResultElement(substring);
     this.waitForElementAndClick(By.xpath(searchResultXpath), "Can not find and click search result with substring: '" + substring + "'", 10);
   }

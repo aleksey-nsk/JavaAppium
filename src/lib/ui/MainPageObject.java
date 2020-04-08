@@ -110,7 +110,6 @@ public class MainPageObject {
   }
 
   public void swipeUpQuick() {
-    System.out.println();
     System.out.println("  Метод для быстрого свайпа вверх");
     swipeUp(200);
   }
@@ -129,20 +128,20 @@ public class MainPageObject {
   }
 
   public void swipeElementToLeft(By locator, String errorMessage) {
-    System.out.println("Свайп по элементу влево");
+    System.out.println("\nSwipe Element To Left");
 
     WebElement element = waitForElementPresent(locator, errorMessage, 10);
-    System.out.println("Элемент получен. Вычисляем необходимые координаты");
+    System.out.println("  Элемент получен. Вычисляем необходимые координаты");
     int left_x = element.getLocation().getX();
     int right_x = left_x + element.getSize().getWidth();
     int upper_y = element.getLocation().getY();
     int lower_y = upper_y + element.getSize().getHeight();
     int middle_y = (upper_y + lower_y) / 2;
-    System.out.println("  left_x: " + left_x);
-    System.out.println("  right_x: " + right_x);
-    System.out.println("  upper_y: " + upper_y);
-    System.out.println("  lower_y: " + lower_y);
-    System.out.println("  middle_y: " + middle_y);
+    System.out.println("    left_x: " + left_x);
+    System.out.println("    right_x: " + right_x);
+    System.out.println("    upper_y: " + upper_y);
+    System.out.println("    lower_y: " + lower_y);
+    System.out.println("    middle_y: " + middle_y);
 
     TouchAction action = new TouchAction(driver);
     action

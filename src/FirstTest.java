@@ -1,7 +1,5 @@
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -101,108 +99,24 @@ public class FirstTest extends CoreTestCase {
   public void testSaveFirstArticleToMyList() {
     System.out.print("\n\n***** Тестовый метод testSaveFirstArticleToMyList() *****\n");
 
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-        "Can not find 'Search Wikipedia' input",
-        5
-    );
+    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    searchPageObject.initSearchInput();
+    searchPageObject.typeSearchLine("Java");
+    searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-    mainPageObject.waitForElementAndSendKeys(
-        By.xpath("//*[contains(@text, 'Search…')]"),
-        "Java",
-        "Can not find 'Search…' input",
-        5
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-        "Can not find 'Object-oriented programming language' topic, searching by 'Java'",
-        5
-    );
-
-    mainPageObject.waitForElementPresent(
-        By.id("org.wikipedia:id/view_page_title_text"),
-        "Can not find article title",
-        15
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageView']"),
-        "Can not find button to open article options",
-        5
-    );
-
-    mainPageObject.waitForElementPresent(
-        By.xpath("//*[@class='android.widget.FrameLayout']/*[@class='android.widget.ListView']"),
-        "Не дождались контейнер, содержащий пункты меню"
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@text='Add to reading list']"),
-        "Can not find option to add article to reading list",
-        5
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.id("org.wikipedia:id/onboarding_button"),
-        "Can not find 'Got it' tip overlay",
-        5
-    );
-
-    mainPageObject.waitForElementAndClear(
-        By.id("org.wikipedia:id/text_input"),
-        "Can not find input to set name of articles folder",
-        5
-    );
-
+    ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+    articlePageObject.waitForTitleElement();
+    final String articleTitle = articlePageObject.getArticleTitle();
     final String nameOfFolder = "Learning programming";
+    articlePageObject.addArticleToMyList(nameOfFolder);
+    articlePageObject.closeArticle();
 
-    mainPageObject.waitForElementAndSendKeys(
-        By.id("org.wikipedia:id/text_input"),
-        nameOfFolder,
-        "Can not put text into articles folder input",
-        5
-    );
+    NavigationUI navigationUI = new NavigationUI(driver);
+    navigationUI.clickMyList();
 
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@text='OK']"),
-        "Can not press OK button",
-        5
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@resource-id='org.wikipedia:id/page_toolbar']/*[@class='android.widget.ImageButton']"),
-        "Can not close article, can not find X link",
-        5
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@resource-id='org.wikipedia:id/fragment_main_nav_tab_layout']//*[@content-desc='My lists']"),
-        "Can not find navigation button to My list",
-        5
-    );
-
-    mainPageObject.waitForElementPresent(
-        By.xpath("//*[@resource-id='org.wikipedia:id/reading_list_list']"),
-        "Не дождались контейнер, содержащий папки с сохранёнными статьями"
-    );
-
-    mainPageObject.waitForElementAndClick(
-        By.xpath("//*[@text='" + nameOfFolder + "']"),
-        "Can not find created folder",
-        5
-    );
-
-    mainPageObject.swipeElementToLeft(
-        By.xpath("//*[@text='Java (programming language)']"),
-        "Can not find saved article"
-    );
-
-    mainPageObject.waitForElementNotPresent(
-        By.xpath("//*[@text='Java (programming language)']"),
-        "Can not delete saved article",
-        5
-    );
+    MyListsPageObject listsPageObject = new MyListsPageObject(driver);
+    listsPageObject.openFolderByName(nameOfFolder);
+    listsPageObject.swipeByArticleToDelete(articleTitle);
   }
 
   @Test
