@@ -10,7 +10,9 @@ public class SearchPageObject extends MainPageObject {
   private static final String SEARCH_RESULT_BY_SUBSTRING_TEMPLATE = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']";
   private static final String SEARCH_CANCEL_BUTTON = "//*[@resource-id='org.wikipedia:id/search_close_btn']";
   private static final String SEARCH_FIELD = "//*[@resource-id='org.wikipedia:id/search_src_text']";
-
+  private static final String SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
+  private static final String SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+  
   public SearchPageObject(AppiumDriver driver) {
     super(driver);
   }
@@ -66,5 +68,23 @@ public class SearchPageObject extends MainPageObject {
   public void clickCancelButton() {
     System.out.println("\nClick Cancel Button");
     this.waitForElementAndClick(By.xpath(SEARCH_CANCEL_BUTTON), "Can not find and click search cancel button", 5);
+  }
+
+  public int getAmountOfFoundArticles() {
+    System.out.println("\nGet Amount Of Found Articles");
+    this.waitForElementPresent(By.xpath(SEARCH_RESULT_ELEMENT), "Can not find anything by the request", 15);
+    int amountOfFoundArticles = this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
+    System.out.println("  amountOfFoundArticles: " + amountOfFoundArticles);
+    return amountOfFoundArticles;
+  }
+
+  public void waitForEmptyResultLabel() {
+    System.out.println("\nWait For Empty Result Label");
+    this.waitForElementPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT), "Can not find empty result element", 15);
+  }
+
+  public void assertThereIsNoResultOfSearch() {
+    System.out.println("\nAssert There Is No Result Of Search");
+    this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We have found some results");
   }
 }

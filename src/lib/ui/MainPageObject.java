@@ -153,21 +153,21 @@ public class MainPageObject {
   }
 
   public int getAmountOfElements(By locator) {
-    System.out.println("Определим количество элементов, найденных по локатору: '" + locator + "'");
+    System.out.println("  Определим количество элементов, найденных по локатору: '" + locator + "'");
     List elements = driver.findElements(locator);
     final int amountOfElements = elements.size();
-    System.out.println("  amountOfElements: " + amountOfElements);
+    System.out.println("  Количество найденных элементов: " + amountOfElements);
     return amountOfElements;
   }
 
   public void assertElementNotPresent(By locator, String errorMessage) {
-    System.out.println("Убедимся, что элементов нет");
+    System.out.println("  Убедимся, что элементов нет");
     final int amountOfElements = getAmountOfElements(locator);
     if (amountOfElements > 0) {
       final String defaultMessage = "An element '" + locator.toString() + "' supposed to be not present.";
       throw new AssertionError(defaultMessage + " " + errorMessage);
     } else {
-      System.out.println("Проверка успешна. Элементов нет");
+      System.out.println("  Проверка успешна. Элементов нет");
     }
   }
 
