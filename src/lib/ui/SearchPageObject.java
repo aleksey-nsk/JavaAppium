@@ -14,6 +14,7 @@ public class SearchPageObject extends MainPageObject {
   private static final String SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
   private static final String SEARCH_RESULTS_LIST = "//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']";
   private static final String SEARCH_RESULTS_LIST_ITEM_TITLE = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+  private static final String SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TEMPLATE = "//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{TITLE}']/../*[@resource-id='org.wikipedia:id/page_list_item_description'][@text='{DESCRIPTION}']";
 
   public SearchPageObject(AppiumDriver driver) {
     super(driver);
@@ -23,6 +24,11 @@ public class SearchPageObject extends MainPageObject {
 
   private static String getSearchResultElement(String substring) {
     return SEARCH_RESULT_BY_SUBSTRING_TEMPLATE.replace("{SUBSTRING}", substring);
+  }
+
+  private static String getSearchResultByTitleAndDescription(String title, String description) {
+    String searchResult = SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TEMPLATE.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
+    return searchResult;
   }
 
   // ----------------------- TEMPLATE METHODS -----------------------
@@ -99,5 +105,14 @@ public class SearchPageObject extends MainPageObject {
     System.out.println("\nCheck Word In Search List");
     System.out.println("  word: '" + word + "'");
     this.checkWordInSearch(By.xpath(SEARCH_RESULTS_LIST_ITEM_TITLE), word);
+  }
+
+  public void waitForElementByTitleAndDescription(String title, String description) {
+    System.out.println("\nWait For Element By Title And Description");
+    System.out.println("  title: '" + title + "'");
+    System.out.println("  description: '" + description + "'");
+    String searchResultXpath = getSearchResultByTitleAndDescription(title, description);
+    System.out.println("  searchResultXpath: '" + searchResultXpath + "'");
+    this.waitForElementPresent(By.xpath(searchResultXpath), "Can not find search result with title: '" + title + "', and description: '" + description + "'", 15);
   }
 }

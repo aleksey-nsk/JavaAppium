@@ -59,4 +59,24 @@ public class SearchTests extends CoreTestCase {
     searchPageObject.waitForSearchResultsList();
     searchPageObject.checkWordInSearchList(searchWord);
   }
+
+  @Test
+  public void testSearchByTitleAndDescription() {
+    System.out.print("\n\n***** Тестовый метод testSearchByTitleAndDescription() *****\n");
+
+    final String searchLine = "Java";
+    final String title1 = "Java";
+    final String description1 = "Island of Indonesia";
+    final String title2 = "JavaScript";
+    final String description2 = "Programming language";
+    final String title3 = "Java (programming language)";
+    final String description3 = "Object-oriented programming language";
+
+    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    searchPageObject.initSearchInput();
+    searchPageObject.typeSearchLine(searchLine);
+    searchPageObject.waitForElementByTitleAndDescription(title1, description1);
+    searchPageObject.waitForElementByTitleAndDescription(title2, description2);
+    searchPageObject.waitForElementByTitleAndDescription(title3, description3);
+  }
 }
