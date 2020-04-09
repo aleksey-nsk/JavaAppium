@@ -66,11 +66,11 @@ public class MainPageObject {
   }
 
   public void checkWordInSearch(By locator, String word) {
-    System.out.println("Убедимся, что во всех элементах, найденных по локатору: '" + locator + "', присутствует слово: '" + word + "'");
+    System.out.println("  Убедимся, что во всех элементах, найденных по локатору: '" + locator + "', присутствует слово: '" + word + "'");
     List<WebElement> elements = driver.findElements(locator);
     for (WebElement element : elements) {
       String textInElement = element.getAttribute("text");
-      System.out.println("  textInElement: " + textInElement);
+      System.out.println("    textInElement: '" + textInElement + "'");
       if (!textInElement.contains(word)) {
         throw new AssertionError("Текст текущего элемента не содержит слово '" + word + "'");
       }
@@ -180,10 +180,10 @@ public class MainPageObject {
   }
 
   public void assertElementPresent(By locator, String errorMessage) {
-    System.out.println("Убедимся, что элемент присутствует");
+    System.out.println("  Убедимся, что элемент присутствует");
     final int amountOfElements = getAmountOfElements(locator);
     if (amountOfElements > 0) {
-      System.out.println("Проверка успешна. Элемент присутствует");
+      System.out.println("  Проверка успешна. Элемент присутствует");
     } else {
       final String defaultMessage = "По локатору '" + locator.toString() + "' элемент не найден.";
       throw new AssertionError(defaultMessage + " " + errorMessage);

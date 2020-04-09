@@ -12,7 +12,9 @@ public class SearchPageObject extends MainPageObject {
   private static final String SEARCH_FIELD = "//*[@resource-id='org.wikipedia:id/search_src_text']";
   private static final String SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
   private static final String SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
-  
+  private static final String SEARCH_RESULTS_LIST = "//*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']";
+  private static final String SEARCH_RESULTS_LIST_ITEM_TITLE = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+
   public SearchPageObject(AppiumDriver driver) {
     super(driver);
   }
@@ -86,5 +88,16 @@ public class SearchPageObject extends MainPageObject {
   public void assertThereIsNoResultOfSearch() {
     System.out.println("\nAssert There Is No Result Of Search");
     this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We have found some results");
+  }
+
+  public void waitForSearchResultsList() {
+    System.out.println("\nWait For Search Results List");
+    this.waitForElementPresent(By.xpath(SEARCH_RESULTS_LIST), "Can not find element, with search results list", 5);
+  }
+
+  public void checkWordInSearchList(String word) {
+    System.out.println("\nCheck Word In Search List");
+    System.out.println("  word: '" + word + "'");
+    this.checkWordInSearch(By.xpath(SEARCH_RESULTS_LIST_ITEM_TITLE), word);
   }
 }
