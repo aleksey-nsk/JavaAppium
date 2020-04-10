@@ -24,3 +24,9 @@ test_reports/
 
 # Allure Report
 allure-report/
+
+# Applications
+/apks/
+
+# Libraries
+/libs/
