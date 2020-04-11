@@ -1,4 +1,4 @@
-package tests.iOS;
+package tests;
 
 import lib.CoreTestCase;
 import lib.ui.WelcomePageObject;
@@ -9,6 +9,11 @@ public class GetStartedTest extends CoreTestCase {
   @Test
   public void testPassThroughWelcome() {
     System.out.print("\n\n***** Тестовый метод testPassThroughWelcome() *****\n");
+
+    if (this.platform.isAndroid()) {
+      System.out.println("Skip this test");
+      return;
+    }
 
     WelcomePageObject welcomePage = new WelcomePageObject(driver);
 
