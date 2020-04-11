@@ -30,3 +30,6 @@ allure-report/
 
 # Libraries
 /libs/
+
+# Other
+.attach_*
