@@ -5,6 +5,7 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class MyListsTests extends CoreTestCase {
     searchPageObject.typeSearchLine("Java");
     searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-    ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+    ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.waitForTitleElement();
     final String articleTitle = articlePageObject.getArticleTitle();
     final String nameOfFolder = "Learning programming";
@@ -48,7 +49,7 @@ public class MyListsTests extends CoreTestCase {
     searchPageObject.typeSearchLine(searchLine);
     searchPageObject.clickByArticleWithSubstring(firstArticleTitle);
 
-    ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+    ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.waitForTitleElement();
     articlePageObject.addArticleToNewList(nameOfFolder);
     articlePageObject.closeArticle();

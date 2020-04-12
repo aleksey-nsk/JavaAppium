@@ -2,20 +2,21 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
+import lib.Platform;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
-  private static final String TITLE = "xpath://*[@resource-id='org.wikipedia:id/view_page_title_text']";
-  private static final String FOOTER_ELEMENT = "xpath://*[@text='View page in browser']";
-  private static final String OPTION_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageView']";
-  private static final String CONTAINER_WITH_MENU_ITEMS = "xpath://*[@class='android.widget.FrameLayout']/*[@class='android.widget.ListView']";
-  private static final String OPTION_ADD_ARTICLE_TO_LIST = "xpath://*[@text='Add to reading list']";
-  private static final String ADD_TO_LIST_OVERLAY = "xpath://*[@resource-id='org.wikipedia:id/onboarding_button']";
-  private static final String LIST_NAME_INPUT = "xpath://*[@resource-id='org.wikipedia:id/text_input']";
-  private static final String LIST_OK_BUTTON = "xpath://*[@text='OK']";
-  private static final String CLOSE_ARTICLE_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']/*[@class='android.widget.ImageButton']";
-  private static final String LISTS_CONTAINER = "xpath://*[@resource-id='org.wikipedia:id/lists_container']";
-  private static final String FOLDER_BY_NAME_TEMPLATE = "xpath://*[@text='{FOLDER_NAME}']";
+  protected static String TITLE;
+  protected static String FOOTER_ELEMENT;
+  protected static String OPTION_BUTTON;
+  protected static String CONTAINER_WITH_MENU_ITEMS;
+  protected static String OPTION_ADD_ARTICLE_TO_LIST;
+  protected static String ADD_TO_LIST_OVERLAY;
+  protected static String LIST_NAME_INPUT;
+  protected static String LIST_OK_BUTTON;
+  protected static String CLOSE_ARTICLE_BUTTON;
+  protected static String LISTS_CONTAINER;
+  protected static String FOLDER_BY_NAME_TEMPLATE;
 
   public ArticlePageObject(AppiumDriver driver) {
     super(driver);
@@ -38,14 +39,22 @@ public class ArticlePageObject extends MainPageObject {
   public String getArticleTitle() {
     System.out.println("\nGet Article Title");
     WebElement titleElement = waitForTitleElement();
-    String articleTitle = titleElement.getAttribute("text");
-    System.out.println("\nGet Article Title. Return article title: '" + articleTitle + "'");
-    return articleTitle;
+    if (Platform.getInstance().isAndroid()) {
+      String articleTitle = titleElement.getAttribute("text");
+      System.out.println("\nGet Article Title. Return article title: '" + articleTitle + "'");
+      return articleTitle;
+    } else {
+      return titleElement.getAttribute("name");
+    }
   }
 
   public void swipeToFooter() {
     System.out.println("\nSwipe To Footer");
-    this.swipeUpToFindElement(FOOTER_ELEMENT, "Can not find the end of the article", 20);
+    if (Platform.getInstance().isAndroid()) {
+      this.swipeUpToFindElement(FOOTER_ELEMENT, "Can not find the end of the article", 60);
+    } else {
+      this.swipeUpTillElementAppear(FOOTER_ELEMENT, "Can not find the end of the article", 60);
+    }
   }
 
   public void addArticleToNewList(String nameOfFolder) {

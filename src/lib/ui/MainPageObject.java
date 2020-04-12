@@ -136,6 +136,30 @@ public class MainPageObject {
     }
   }
 
+  public void swipeUpTillElementAppear(String locatorWithType, String errorMessage, int maxSwipes) {
+    System.out.println("\nSwipe Up Till Element Appear");
+    int alreadySwiped = 0;
+    while (!this.isElementLocatedOnTheScreen(locatorWithType)) {
+      if (alreadySwiped > maxSwipes) {
+        Assert.assertTrue(errorMessage, this.isElementLocatedOnTheScreen(locatorWithType));
+      }
+      swipeUpQuick();
+      alreadySwiped++;
+    }
+  }
+
+  public boolean isElementLocatedOnTheScreen(String locatorWithType) {
+    System.out.println("Is Element Located On The Screen");
+    final int elementLocationByY = this.waitForElementPresent(locatorWithType, "Cannot find element by locator", 5).getLocation().getY();
+    final int screenSizeByY = driver.manage().window().getSize().getHeight();
+    System.out.println("  elementLocationByY: " + elementLocationByY);
+    System.out.println("  screenSizeByY: " + screenSizeByY);
+
+    final boolean elementLocatedOnTheScreen = elementLocationByY < screenSizeByY;
+    System.out.println("  element located on the screen: " + elementLocatedOnTheScreen);
+    return elementLocatedOnTheScreen;
+  }
+
   public void swipeElementToLeft(String locatorWithType, String errorMessage) {
     System.out.println("\nSwipe Element To Left");
 
