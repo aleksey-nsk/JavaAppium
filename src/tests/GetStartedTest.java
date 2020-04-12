@@ -11,7 +11,7 @@ public class GetStartedTest extends CoreTestCase {
     System.out.print("\n\n***** Тестовый метод testPassThroughWelcome() *****\n");
 
     if (this.platform.isAndroid()) {
-      System.out.println("Skip this test");
+      System.out.println("  Skip this test");
       return;
     }
 
