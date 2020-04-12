@@ -40,12 +40,14 @@ public class Platform {
   }
 
   public boolean isAndroid() {
+    System.out.println("\nIs Android");
     boolean isPlatformBoolean = isPlatform(PLATFORM_ANDROID);
     System.out.println("  Is Android ? --> " + isPlatformBoolean);
     return isPlatformBoolean;
   }
 
   public boolean isIOS() {
+    System.out.println("\nIs iOS");
     boolean isPlatformBoolean = isPlatform(PLATFORM_IOS);
     System.out.println("  Is iOS ? --> " + isPlatformBoolean);
     return isPlatformBoolean;

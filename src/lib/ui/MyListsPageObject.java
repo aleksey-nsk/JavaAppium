@@ -1,12 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject {
+abstract public class MyListsPageObject extends MainPageObject {
 
-  private static final String CONTAINER_WITH_LISTS = "xpath://*[@resource-id='org.wikipedia:id/reading_list_list']";
-  private static final String FOLDER_BY_NAME_TEMPLATE = "xpath://*[@text='{FOLDER_NAME}']";
-  private static final String ARTICLE_BY_TITLE_TEMPLATE = "xpath://*[@text='{TITLE}']";
+  protected static String CONTAINER_WITH_LISTS;
+  protected static String FOLDER_BY_NAME_TEMPLATE;
+  protected static String ARTICLE_BY_TITLE_TEMPLATE;
 
   public MyListsPageObject(AppiumDriver driver) {
     super(driver);
@@ -52,6 +53,9 @@ public class MyListsPageObject extends MainPageObject {
     this.waitForArticleToAppearByTitle(articleTitle);
     String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
     this.swipeElementToLeft(articleLocatorWithType, "Can not find saved article");
+    if (Platform.getInstance().isIOS()) {
+      this.clickElementToTheRightUpperCorner(articleLocatorWithType, "Can not find saved article");
+    }
     this.waitForArticleToDisappearByTitle(articleTitle);
   }
 

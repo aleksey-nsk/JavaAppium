@@ -71,6 +71,11 @@ abstract public class ArticlePageObject extends MainPageObject {
     this.waitForElementAndClick(LIST_OK_BUTTON, "Can not press OK button", 5);
   }
 
+  public void addArticlesToMySaved() {
+    System.out.println("\nAdd Articles To My Saved");
+    this.waitForElementAndClick(OPTION_ADD_ARTICLE_TO_LIST, "Cannot find option to add article to reading list", 5);
+  }
+
   public void closeArticle() {
     System.out.println("\nClose Article");
     this.waitForElementAndClick(CLOSE_ARTICLE_BUTTON, "Can not close article, can not find X link", 5);

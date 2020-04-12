@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 import java.util.regex.Pattern;
+import lib.Platform;
 
 public class MainPageObject {
 
@@ -160,6 +161,23 @@ public class MainPageObject {
     return elementLocatedOnTheScreen;
   }
 
+  public void clickElementToTheRightUpperCorner(String locatorWithType, String errorMessage) {
+    System.out.println("\nClick Element To The Right Upper Corner");
+
+    WebElement element = this.waitForElementPresent(locatorWithType + "/..", errorMessage);
+    System.out.println("  Элемент получен. Вычисляем необходимые координаты");
+    int right_x = element.getLocation().getX();
+    int upper_y = element.getLocation().getY();
+    int lower_y = upper_y + element.getSize().getHeight();
+    int middle_y = (upper_y + lower_y) / 2;
+    int width = element.getSize().getWidth();
+    int point_to_click_x = (right_x + width) - 3;
+    int point_to_ckick_y = middle_y;
+
+    TouchAction action = new TouchAction(driver);
+    action.tap(PointOption.point(point_to_click_x, point_to_ckick_y)).perform();
+  }
+
   public void swipeElementToLeft(String locatorWithType, String errorMessage) {
     System.out.println("\nSwipe Element To Left");
 
@@ -177,12 +195,16 @@ public class MainPageObject {
     System.out.println("    middle_y: " + middle_y);
 
     TouchAction action = new TouchAction(driver);
-    action
-        .press(PointOption.point(right_x, middle_y))
-        .waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000)))
-        .moveTo(PointOption.point(left_x, middle_y))
-        .release()
-        .perform();
+    action.press(PointOption.point(right_x, middle_y));
+    action.waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000)));
+    if (Platform.getInstance().isAndroid()) {
+      action.moveTo(PointOption.point(left_x, middle_y));
+    } else {
+      int offsetX = (-1 * element.getSize().getWidth());
+      action.moveTo(PointOption.point(offsetX, 0));
+    }
+    action.release();
+    action.perform();
   }
 
   public int getAmountOfElements(String locatorWithType) {
