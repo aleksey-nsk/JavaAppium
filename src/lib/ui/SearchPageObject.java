@@ -2,18 +2,18 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-  private static final String SEARCH_INIT_ELEMENT = "xpath://*[contains(@text, 'Search Wikipedia')]";
-  private static final String SEARCH_INPUT = "xpath://*[contains(@text, 'Search…')]";
-  private static final String SEARCH_RESULT_BY_SUBSTRING_TEMPLATE = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']";
-  private static final String SEARCH_CANCEL_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/search_close_btn']";
-  private static final String SEARCH_FIELD = "xpath://*[@resource-id='org.wikipedia:id/search_src_text']";
-  private static final String SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
-  private static final String SEARCH_EMPTY_RESULT_ELEMENT = "xpath://*[@text='No results found']";
-  private static final String SEARCH_RESULTS_LIST = "xpath://*[@resource-id='org.wikipedia:id/search_results_container']/*[@resource-id='org.wikipedia:id/search_results_list']";
-  private static final String SEARCH_RESULTS_LIST_ITEM_TITLE = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
-  private static final String SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TEMPLATE = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{TITLE}']/../*[@resource-id='org.wikipedia:id/page_list_item_description'][@text='{DESCRIPTION}']";
+  protected static String SEARCH_INIT_ELEMENT;
+  protected static String SEARCH_INPUT;
+  protected static String SEARCH_RESULT_BY_SUBSTRING_TEMPLATE;
+  protected static String SEARCH_CANCEL_BUTTON;
+  protected static String SEARCH_FIELD;
+  protected static String SEARCH_RESULT_ELEMENT;
+  protected static String SEARCH_EMPTY_RESULT_ELEMENT;
+  protected static String SEARCH_RESULTS_LIST;
+  protected static String SEARCH_RESULTS_LIST_ITEM_TITLE;
+  protected static String SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TEMPLATE;
 
   public SearchPageObject(AppiumDriver driver) {
     super(driver);
