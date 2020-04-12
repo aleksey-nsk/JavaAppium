@@ -13,6 +13,17 @@ public class Platform {
   private static final String PLATFORM_ANDROID = "android";
   private static String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
 
+  private static Platform instance;
+
+  private Platform() {} // приватный конструктор
+
+  public static Platform getInstance() {
+    if (instance == null) {
+      instance = new Platform();
+    }
+    return instance;
+  }
+
   public AppiumDriver getDriver() throws Exception {
     System.out.println("Get Driver");
 

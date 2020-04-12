@@ -5,6 +5,7 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
@@ -13,7 +14,7 @@ public class MyListsTests extends CoreTestCase {
   public void testSaveFirstArticleToMyList() {
     System.out.print("\n\n***** Тестовый метод testSaveFirstArticleToMyList() *****\n");
 
-    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");
     searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
@@ -42,7 +43,7 @@ public class MyListsTests extends CoreTestCase {
     final String secondArticleTitle = "Java (software platform)";
     final String nameOfFolder = "Learning programming";
 
-    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine(searchLine);
     searchPageObject.clickByArticleWithSubstring(firstArticleTitle);
