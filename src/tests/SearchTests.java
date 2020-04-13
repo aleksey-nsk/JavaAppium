@@ -66,10 +66,13 @@ public class SearchTests extends CoreTestCase {
     System.out.print("\n\n***** Тестовый метод testSearchByTitleAndDescription() *****\n");
 
     final String searchLine = "Java";
+
     final String title1 = "Java";
     final String description1 = "Island of Indonesia";
+
     final String title2 = "JavaScript";
     final String description2 = "Programming language";
+
     final String title3 = "Java (programming language)";
     final String description3 = "Object-oriented programming language";
 

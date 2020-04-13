@@ -26,8 +26,7 @@ abstract public class SearchPageObject extends MainPageObject {
   }
 
   private static String getSearchResultByTitleAndDescription(String title, String description) {
-    String searchResult = SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TEMPLATE.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
-    return searchResult;
+    return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TEMPLATE.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
   }
 
   // ----------------------- TEMPLATE METHODS -----------------------
@@ -110,8 +109,10 @@ abstract public class SearchPageObject extends MainPageObject {
     System.out.println("\nWait For Element By Title And Description");
     System.out.println("  title: '" + title + "'");
     System.out.println("  description: '" + description + "'");
+
     String searchResultLocatorWithType = getSearchResultByTitleAndDescription(title, description);
     System.out.println("  searchResultLocatorWithType: '" + searchResultLocatorWithType + "'");
+
     this.waitForElementPresent(searchResultLocatorWithType, "Can not find search result with title: '" + title + "', and description: '" + description + "'", 15);
   }
 }
