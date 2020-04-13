@@ -3,6 +3,8 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {
@@ -11,12 +13,12 @@ public class ArticleTests extends CoreTestCase {
   public void testCompareArticleTitle() {
     System.out.print("\n\n***** Тестовый метод testCompareArticleTitle() *****\n");
 
-    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");
     searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-    ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+    ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     String articleTitle = articlePageObject.getArticleTitle();
 
     String expectedTitle = "Java (programming language)";
@@ -27,12 +29,12 @@ public class ArticleTests extends CoreTestCase {
   public void testSwipeArticle() {
     System.out.print("\n\n***** Тестовый метод testSwipeArticle() *****\n");
 
-    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
-    searchPageObject.typeSearchLine("Appium");
-    searchPageObject.clickByArticleWithSubstring("Appium");
+    searchPageObject.typeSearchLine("Java");
+    searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-    ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+    ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.waitForTitleElement();
     articlePageObject.swipeToFooter();
   }
@@ -41,12 +43,12 @@ public class ArticleTests extends CoreTestCase {
   public void testAssertTitle() {
     System.out.print("\n\n***** Тестовый метод testAssertTitle() *****\n");
 
-    SearchPageObject searchPageObject = new SearchPageObject(driver);
+    SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");
     searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-    ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+    ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.assertTitlePresentWithoutWait();
   }
 }

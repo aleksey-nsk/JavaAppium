@@ -1,13 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject {
+abstract public class MyListsPageObject extends MainPageObject {
 
-  private static final String CONTAINER_WITH_LISTS = "//*[@resource-id='org.wikipedia:id/reading_list_list']";
-  private static final String FOLDER_BY_NAME_TEMPLATE = "//*[@text='{FOLDER_NAME}']";
-  private static final String ARTICLE_BY_TITLE_TEMPLATE = "//*[@text='{TITLE}']";
+  protected static String CONTAINER_WITH_LISTS;
+  protected static String FOLDER_BY_NAME_TEMPLATE;
+  protected static String ARTICLE_BY_TITLE_TEMPLATE;
 
   public MyListsPageObject(AppiumDriver driver) {
     super(driver);
@@ -28,31 +28,34 @@ public class MyListsPageObject extends MainPageObject {
   public void openFolderByName(String nameOfFolder) {
     System.out.println("\nOpen Folder By Name");
     System.out.println("  nameOfFolder: '" + nameOfFolder + "'");
-    this.waitForElementPresent(By.xpath(CONTAINER_WITH_LISTS), "Can not find container, which includes folders with articles", 5);
-    String folderNameXpath = getFolderXpathByName(nameOfFolder);
-    this.waitForElementAndClick(By.xpath(folderNameXpath), "Can not find folder by name: '" + nameOfFolder + "'", 5);
+    this.waitForElementPresent(CONTAINER_WITH_LISTS, "Can not find container, which includes folders with articles", 5);
+    String folderLocatorWithType = getFolderXpathByName(nameOfFolder);
+    this.waitForElementAndClick(folderLocatorWithType, "Can not find folder by name: '" + nameOfFolder + "'", 5);
   }
 
   public void waitForArticleToAppearByTitle(String articleTitle) {
     System.out.println("\nWait For Article To Appear By Title");
     System.out.println("  articleTitle: '" + articleTitle + "'");
-    String articleXpath = getSavedArticleXpathByTitle(articleTitle);
-    this.waitForElementPresent(By.xpath(articleXpath), "Can not find saved article with title '" + articleTitle + "'", 10);
+    String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
+    this.waitForElementPresent(articleLocatorWithType, "Can not find saved article with title '" + articleTitle + "'", 10);
   }
 
   public void waitForArticleToDisappearByTitle(String articleTitle) {
     System.out.println("\nWait For Article To Disappear By Title");
     System.out.println("  articleTitle: '" + articleTitle + "'");
-    String articleXpath = getSavedArticleXpathByTitle(articleTitle);
-    this.waitForElementNotPresent(By.xpath(articleXpath), "Saved article with title '" + articleTitle + "' still present", 10);
+    String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
+    this.waitForElementNotPresent(articleLocatorWithType, "Saved article with title '" + articleTitle + "' still present", 10);
   }
 
   public void swipeByArticleToDelete(String articleTitle) {
     System.out.println("\nSwipe By Article To Delete");
     System.out.println("  articleTitle: '" + articleTitle + "'");
     this.waitForArticleToAppearByTitle(articleTitle);
-    String articleXpath = getSavedArticleXpathByTitle(articleTitle);
-    this.swipeElementToLeft(By.xpath(articleXpath), "Can not find saved article");
+    String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
+    this.swipeElementToLeft(articleLocatorWithType, "Can not find saved article");
+    if (Platform.getInstance().isIOS()) {
+      this.clickElementToTheRightUpperCorner(articleLocatorWithType, "Can not find saved article");
+    }
     this.waitForArticleToDisappearByTitle(articleTitle);
   }
 
@@ -60,8 +63,8 @@ public class MyListsPageObject extends MainPageObject {
     System.out.println("\nOpen Article By Title");
     System.out.println("  articleTitle: '" + articleTitle + "'");
     this.waitForArticleToAppearByTitle(articleTitle);
-    String articleXpath = getSavedArticleXpathByTitle(articleTitle);
+    String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
     System.out.println();
-    this.waitForElementAndClick(By.xpath(articleXpath), "Can not click on article with title '" + articleTitle + "'", 5);
+    this.waitForElementAndClick(articleLocatorWithType, "Can not click on article with title '" + articleTitle + "'", 5);
   }
 }
