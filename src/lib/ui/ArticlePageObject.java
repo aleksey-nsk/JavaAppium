@@ -36,6 +36,13 @@ abstract public class ArticlePageObject extends MainPageObject {
     return titleElement;
   }
 
+  public WebElement waitForIOSTitle(String iosTitle) {
+    System.out.println("\nWait For iOS Title");
+    System.out.println("  iosTitle: '" + iosTitle + "'");
+    WebElement titleElement = this.waitForElementPresent(("id:" + iosTitle), "Can not find article title on page", 15);
+    return titleElement;
+  }
+
   public String getArticleTitle() {
     System.out.println("\nGet Article Title");
     WebElement titleElement = waitForTitleElement();
@@ -45,6 +52,17 @@ abstract public class ArticlePageObject extends MainPageObject {
       return articleTitle;
     } else {
       return titleElement.getAttribute("name");
+    }
+  }
+
+  public String getArticleIOSTitle(String iosTitle) {
+    System.out.println("\nGet Article iOS Title");
+    if (Platform.getInstance().isIOS()) {
+      WebElement titleElement = waitForIOSTitle(iosTitle);
+      String articleTitle = titleElement .getAttribute("name");
+      return articleTitle;
+    } else {
+      throw new AssertionError("Error: this method is only for iOS");
     }
   }
 
