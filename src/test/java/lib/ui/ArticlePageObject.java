@@ -1,8 +1,8 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 import lib.Platform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class ArticlePageObject extends MainPageObject {
 
@@ -18,7 +18,7 @@ abstract public class ArticlePageObject extends MainPageObject {
   protected static String LISTS_CONTAINER;
   protected static String FOLDER_BY_NAME_TEMPLATE;
 
-  public ArticlePageObject(AppiumDriver driver) {
+  public ArticlePageObject(RemoteWebDriver driver) {
     super(driver);
   }
 
