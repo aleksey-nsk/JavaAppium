@@ -8,6 +8,7 @@ abstract public class MyListsPageObject extends MainPageObject {
   protected static String CONTAINER_WITH_LISTS;
   protected static String FOLDER_BY_NAME_TEMPLATE;
   protected static String ARTICLE_BY_TITLE_TEMPLATE;
+  protected static String REMOVE_FROM_SAVED_BUTTON;
 
   public MyListsPageObject(RemoteWebDriver driver) {
     super(driver);
@@ -21,6 +22,10 @@ abstract public class MyListsPageObject extends MainPageObject {
 
   private static String getSavedArticleXpathByTitle(String articleTitle) {
     return ARTICLE_BY_TITLE_TEMPLATE.replace("{TITLE}", articleTitle);
+  }
+
+  private static String getRemoveButtonByTitle(String articleTitle) {
+    return REMOVE_FROM_SAVED_BUTTON.replace("{TITLE}", articleTitle);
   }
 
   // ----------------------- TEMPLATE METHODS -----------------------
@@ -47,15 +52,26 @@ abstract public class MyListsPageObject extends MainPageObject {
     this.waitForElementNotPresent(articleLocatorWithType, "Saved article with title '" + articleTitle + "' still present", 10);
   }
 
-  public void swipeByArticleToDelete(String articleTitle) {
+  public void swipeByArticleToDelete(String articleTitle) throws InterruptedException {
     System.out.println("\nSwipe By Article To Delete");
     System.out.println("  articleTitle: '" + articleTitle + "'");
     this.waitForArticleToAppearByTitle(articleTitle);
     String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
-    this.swipeElementToLeft(articleLocatorWithType, "Can not find saved article");
+
     if (Platform.getInstance().isIOS()) {
+      this.swipeElementToLeft(articleLocatorWithType, "Can not find saved article");
       this.clickElementToTheRightUpperCorner(articleLocatorWithType, "Can not find saved article");
+    } else if (Platform.getInstance().isAndroid()) {
+      this.swipeElementToLeft(articleLocatorWithType, "Can not find saved article");
+    } else if (Platform.getInstance().isMobileWeb()) {
+      String removeLocator = getRemoveButtonByTitle(articleTitle);
+      Thread.sleep(2_000L);
+      this.waitForElementAndClick(removeLocator, "Cannot click button to remove article from saved", 10);
+      Thread.sleep(2_000L);
+      System.out.println("\nОбновим страницу");
+      driver.navigate().refresh();
     }
+
     this.waitForArticleToDisappearByTitle(articleTitle);
   }
 

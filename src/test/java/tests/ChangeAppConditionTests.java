@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
@@ -12,6 +13,11 @@ public class ChangeAppConditionTests extends CoreTestCase {
   @Test
   public void testChangeScreenOrientationOnSearchResults() {
     System.out.print("\n\n***** Тестовый метод testChangeScreenOrientationOnSearchResults() *****\n");
+
+    if (Platform.getInstance().isMobileWeb()) {
+      System.out.println("\nSkip this test");
+      return;
+    }
 
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
@@ -33,6 +39,12 @@ public class ChangeAppConditionTests extends CoreTestCase {
   @Test
   public void testCheckSearchArticleInBackground() {
     System.out.print("\n\n***** Тестовый метод testCheckSearchArticleInBackground() *****\n");
+
+    if (Platform.getInstance().isMobileWeb()) {
+      System.out.println("\nSkip this test");
+      return;
+    }
+
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");

@@ -1,5 +1,7 @@
 package lib.ui;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -11,6 +13,7 @@ abstract public class ArticlePageObject extends MainPageObject {
   protected static String OPTION_BUTTON;
   protected static String CONTAINER_WITH_MENU_ITEMS;
   protected static String OPTION_ADD_ARTICLE_TO_LIST;
+  protected static String OPTION_REMOVE_FROM_LIST_BUTTON;
   protected static String ADD_TO_LIST_OVERLAY;
   protected static String LIST_NAME_INPUT;
   protected static String LIST_OK_BUTTON;
@@ -96,16 +99,6 @@ abstract public class ArticlePageObject extends MainPageObject {
     this.waitForElementAndClick(LIST_OK_BUTTON, "Can not press OK button", 5);
   }
 
-  public void addArticlesToMySaved() {
-    System.out.println("\nAdd Articles To My Saved");
-    this.waitForElementAndClick(OPTION_ADD_ARTICLE_TO_LIST, "Cannot find option to add article to reading list", 5);
-  }
-
-  public void closeArticle() {
-    System.out.println("\nClose Article");
-    this.waitForElementAndClick(CLOSE_ARTICLE_BUTTON, "Can not close article, can not find X link", 5);
-  }
-
   public void addArticleToExistingList(String nameOfFolder) {
     System.out.println("\nAdd Article To Existing List");
     System.out.println("  nameOfFolder: '" + nameOfFolder + "'");
@@ -117,6 +110,33 @@ abstract public class ArticlePageObject extends MainPageObject {
     this.waitForElementPresent(LISTS_CONTAINER, "Can not find container, which include folders with articles", 5);
     String folderLocatorWithType = getFolderElement(nameOfFolder);
     this.waitForElementAndClick(folderLocatorWithType, "Can not find folder with name '" + nameOfFolder + "'", 5);
+  }
+
+  public void addArticlesToMySaved() throws InterruptedException {
+    System.out.println("\nAdd Articles To My Saved");
+    if (Platform.getInstance().isMobileWeb()) {
+      this.removeArticleIfItAdded();
+      this.clickAddArticleToListForMobileWeb(OPTION_ADD_ARTICLE_TO_LIST, "Cannot find option to add article to reading list", 5);
+    } else {
+      this.waitForElementAndClick(OPTION_ADD_ARTICLE_TO_LIST, "Cannot find option to add article to reading list", 5);
+    }
+  }
+
+  public void removeArticleIfItAdded() {
+    System.out.println("\nRemove Article If It Added");
+    if (this.isElementPresent(OPTION_REMOVE_FROM_LIST_BUTTON)) {
+      this.waitForElementAndClick(OPTION_REMOVE_FROM_LIST_BUTTON, "Cannot click button to remove an article from saved", 2);
+      this.waitForElementPresent(OPTION_ADD_ARTICLE_TO_LIST, "Cannot find button to add an article to list, after removing it from the list before", 5);
+    }
+  }
+
+  public void closeArticle() {
+    System.out.println("\nClose Article");
+    if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+      this.waitForElementAndClick(CLOSE_ARTICLE_BUTTON, "Can not close article, can not find X link", 5);
+    } else {
+      System.out.println("\nMethod closeArticle() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+    }
   }
 
   public void assertTitlePresentWithoutWait() {

@@ -39,11 +39,24 @@ public class MainPageObject {
   }
 
   public WebElement waitForElementAndClick(String locatorWithType, String errorMessage, long timeoutInSeconds) {
-    System.out.println("  Дождаться элемент, и кликнуть по нему");
+    System.out.println("\n  Дождаться элемент, и кликнуть по нему");
     WebElement element = waitForElementPresent(locatorWithType, errorMessage, timeoutInSeconds);
     System.out.println("  Кликнуть по элементу");
     element.click();
     return element;
+  }
+
+  public void clickAddArticleToListForMobileWeb(String locatorWithType, String errorMessage, long timeoutInSeconds) throws InterruptedException {
+    System.out.println("\nClick Add Article To List For Mobile Web");
+    if (Platform.getInstance().isMobileWeb()) {
+      Thread.sleep(2_000L);
+      WebElement element = waitForElementPresent(locatorWithType, errorMessage, timeoutInSeconds);
+      System.out.println("\n  Кликнуть по кнопке 'Добавить статью в список'");
+      element.click();
+      Thread.sleep(2_000L);
+    } else {
+      System.out.println("  Method clickAddArticleToListForMobileWeb() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+    }
   }
 
   public WebElement waitForElementAndSendKeys(String locatorWithType, String value, String errorMessage, long timeoutInSeconds) {
@@ -155,7 +168,7 @@ public class MainPageObject {
     WebElement element = this.waitForElementPresent(locatorWithType, errorMessage);
 
     while (!this.isElementLocatedOnTheScreen(locatorWithType)) {
-      Thread.sleep(500); // пауза чтобы увидеть свайп страницы глазами
+      Thread.sleep(500L); // пауза чтобы увидеть свайп страницы глазами
       scrollWebPageUp();
       alreadySwiped++;
       if (alreadySwiped > maxSwipes) {
@@ -272,6 +285,34 @@ public class MainPageObject {
     final int amountOfElements = elements.size();
     System.out.println("  Количество найденных элементов: " + amountOfElements);
     return amountOfElements;
+  }
+
+  public boolean isElementPresent(String locatorWithType) {
+    System.out.println("  Присутствует ли элемент на странице?");
+    System.out.println("    локатор: '" + locatorWithType + "'");
+    final boolean is_element_present = getAmountOfElements(locatorWithType) > 0;
+    System.out.println("  Присутствует ли элемент на странице? --> " + is_element_present);
+    return is_element_present;
+  }
+
+  public void tryClickElementWithFewAttempts(String locatorWithType, String errorMessage, int amountOfAttempts) {
+    System.out.println("\nTry Click Element With Few Attempts");
+    int currentAttempts = 0;
+    boolean needMoreAttempts = true;
+
+    while (needMoreAttempts) {
+      try {
+        this.waitForElementAndClick(locatorWithType, errorMessage, 1);
+        needMoreAttempts = false;
+      } catch (Exception exception) {
+        System.out.println("  ПЕРЕХВАЧЕНО ИСКЛЮЧЕНИЕ: " + exception.getMessage());
+        if (currentAttempts > amountOfAttempts) {
+          this.waitForElementAndClick(locatorWithType, errorMessage, 1);
+          needMoreAttempts = false;
+        }
+      }
+      currentAttempts++;
+    }
   }
 
   public void assertElementNotPresent(String locatorWithType, String errorMessage) {
