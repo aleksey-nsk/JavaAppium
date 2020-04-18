@@ -16,7 +16,7 @@ public class ArticleTests extends CoreTestCase {
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");
-    searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+    searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
     ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     String articleTitle = articlePageObject.getArticleTitle();
@@ -26,13 +26,13 @@ public class ArticleTests extends CoreTestCase {
   }
 
   @Test
-  public void testSwipeArticle() {
+  public void testSwipeArticle() throws InterruptedException {
     System.out.print("\n\n***** Тестовый метод testSwipeArticle() *****\n");
 
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");
-    searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+    searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
     ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.waitForTitleElement();
@@ -46,7 +46,7 @@ public class ArticleTests extends CoreTestCase {
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine("Java");
-    searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+    searchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
     ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.assertTitlePresentWithoutWait();

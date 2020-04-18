@@ -46,13 +46,18 @@ abstract public class ArticlePageObject extends MainPageObject {
   public String getArticleTitle() {
     System.out.println("\nGet Article Title");
     WebElement titleElement = waitForTitleElement();
+    final String articleTitle;
+
     if (Platform.getInstance().isAndroid()) {
-      String articleTitle = titleElement.getAttribute("text");
-      System.out.println("\nGet Article Title. Return article title: '" + articleTitle + "'");
-      return articleTitle;
+      articleTitle = titleElement.getAttribute("text");
+    } else if (Platform.getInstance().isIOS()) {
+      articleTitle = titleElement.getAttribute("name");
     } else {
-      return titleElement.getAttribute("name");
+      articleTitle = titleElement.getText();
     }
+
+    System.out.println("\nGet Article Title. Return article title: '" + articleTitle + "'");
+    return articleTitle;
   }
 
   public String getArticleIOSTitle(String iosTitle) {
@@ -66,12 +71,14 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
   }
 
-  public void swipeToFooter() {
+  public void swipeToFooter() throws InterruptedException {
     System.out.println("\nSwipe To Footer");
     if (Platform.getInstance().isAndroid()) {
       this.swipeUpToFindElement(FOOTER_ELEMENT, "Can not find the end of the article", 60);
-    } else {
+    } else if (Platform.getInstance().isIOS()) {
       this.swipeUpTillElementAppear(FOOTER_ELEMENT, "Can not find the end of the article", 60);
+    } else {
+      this.scrollWebPageTillElementVisible(FOOTER_ELEMENT, "Can not find the end of the article", 60);
     }
   }
 

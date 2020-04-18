@@ -4,6 +4,7 @@ import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.android.AndroidArticlePageObject;
 import lib.ui.ios.IOSArticlePageObject;
+import lib.ui.mobile_web.MWArticlePageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class ArticlePageObjectFactory {
@@ -12,8 +13,10 @@ public class ArticlePageObjectFactory {
     System.out.println("\nArticle Page Object Factory --> method get()");
     if (Platform.getInstance().isAndroid()) {
       return new AndroidArticlePageObject(driver);
-    } else {
+    } else if (Platform.getInstance().isIOS()) {
       return new IOSArticlePageObject(driver);
+    } else {
+      return new MWArticlePageObject(driver);
     }
   }
 }

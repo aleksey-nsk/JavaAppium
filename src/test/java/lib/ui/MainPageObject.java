@@ -7,6 +7,7 @@ import io.appium.java_client.touch.offset.PointOption;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -137,6 +138,32 @@ public class MainPageObject {
     swipeUp(200);
   }
 
+  public void scrollWebPageUp() {
+    System.out.println("\nScroll Web Page Up");
+    if (Platform.getInstance().isMobileWeb()) {
+      System.out.println("\nЭмулировать scroll в web при помощи JavaScript");
+      JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+      jsExecutor.executeScript("window.scrollBy(0, 250)");
+    } else {
+      System.out.println("\nMethod scrollWebPageUp() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+    }
+  }
+
+  public void scrollWebPageTillElementVisible(String locatorWithType, String errorMessage, int maxSwipes) throws InterruptedException {
+    System.out.println("\nScroll Web Page Till Element Visible");
+    int alreadySwiped = 0;
+    WebElement element = this.waitForElementPresent(locatorWithType, errorMessage);
+
+    while (!this.isElementLocatedOnTheScreen(locatorWithType)) {
+      Thread.sleep(500); // пауза чтобы увидеть свайп страницы глазами
+      scrollWebPageUp();
+      alreadySwiped++;
+      if (alreadySwiped > maxSwipes) {
+        Assert.assertTrue(errorMessage, element.isDisplayed());
+      }
+    }
+  }
+
   public void swipeUpToFindElement(String locatorWithType, String errorMessage, int maxSwipes) {
     By locator = this.getLocatorByString(locatorWithType);
     System.out.println("  Свайпать, пока не достигнем элемента с локатором: '" + locator + "'");
@@ -164,14 +191,23 @@ public class MainPageObject {
   }
 
   public boolean isElementLocatedOnTheScreen(String locatorWithType) {
-    System.out.println("Is Element Located On The Screen");
-    final int elementLocationByY = this.waitForElementPresent(locatorWithType, "Cannot find element by locator", 5).getLocation().getY();
+    System.out.println("\nIs Element Located On The Screen");
+
+    int elementLocationByY = this.waitForElementPresent(locatorWithType, "Cannot find element by locator", 5).getLocation().getY();
+    if (Platform.getInstance().isMobileWeb()) {
+      JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+      Object jsResult = jsExecutor.executeScript("return window.pageYOffset");
+      int jsResultInt = Integer.parseInt(jsResult.toString());
+      System.out.println("\njsResultInt: " + jsResultInt);
+      elementLocationByY -= jsResultInt;
+    }
+    System.out.println("\nelementLocationByY: " + elementLocationByY);
+
     final int screenSizeByY = driver.manage().window().getSize().getHeight();
-    System.out.println("  elementLocationByY: " + elementLocationByY);
-    System.out.println("  screenSizeByY: " + screenSizeByY);
+    System.out.println("screenSizeByY: " + screenSizeByY);
 
     final boolean elementLocatedOnTheScreen = elementLocationByY < screenSizeByY;
-    System.out.println("  element located on the screen: " + elementLocatedOnTheScreen);
+    System.out.println("element located on the screen: " + elementLocatedOnTheScreen);
     return elementLocatedOnTheScreen;
   }
 
