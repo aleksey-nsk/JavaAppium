@@ -1,5 +1,6 @@
 package lib.ui;
 
+import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class SearchPageObject extends MainPageObject {
@@ -9,6 +10,7 @@ abstract public class SearchPageObject extends MainPageObject {
   protected static String SEARCH_RESULT_BY_SUBSTRING_TEMPLATE;
   protected static String SEARCH_CANCEL_BUTTON;
   protected static String SEARCH_FIELD;
+  protected static String CLEAR_SEARCH_FIELD_BUTTON;
   protected static String SEARCH_RESULT_ELEMENT;
   protected static String SEARCH_EMPTY_RESULT_ELEMENT;
   protected static String SEARCH_RESULTS_LIST;
@@ -58,7 +60,13 @@ abstract public class SearchPageObject extends MainPageObject {
 
   public void clearSearchField() {
     System.out.println("\nClear Search Field");
-    this.waitForElementAndClear(SEARCH_FIELD, "Can not find search field", 5);
+    if (Platform.getInstance().isMobileWeb()) {
+      System.out.println("\nClick X-button");
+      this.waitForElementAndClick(CLEAR_SEARCH_FIELD_BUTTON, "Can not find X-button", 5);
+    } else {
+      System.out.println("\nClear field");
+      this.waitForElementAndClear(SEARCH_FIELD, "Can not find search field", 5);
+    }
   }
 
   public void waitForCancelButtonToAppear() {

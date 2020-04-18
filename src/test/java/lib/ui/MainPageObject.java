@@ -75,13 +75,22 @@ public class MainPageObject {
 
   public void checkWordInSearch(String locatorWithType, String word) {
     By locator = this.getLocatorByString(locatorWithType);
-    System.out.println("  Убедимся, что во всех элементах, найденных по локатору: '" + locator + "', присутствует слово: '" + word + "'");
+
+    final String attribute;
+    if (Platform.getInstance().isMobileWeb()) {
+      attribute = "textContent";
+    } else {
+      attribute = "text";
+    }
+
+    final String wordInLowerCase = word.toLowerCase();
+    System.out.println("\nУбедимся, что во всех элементах, найденных по локатору: '" + locator + "', присутствует слово: '" + wordInLowerCase + "'");
     List<WebElement> elements = driver.findElements(locator);
     for (WebElement element : elements) {
-      String textInElement = element.getAttribute("text");
-      System.out.println("    textInElement: '" + textInElement + "'");
-      if (!textInElement.contains(word)) {
-        throw new AssertionError("Текст текущего элемента не содержит слово '" + word + "'");
+      String textInElementInLowerCase = element.getAttribute(attribute).toLowerCase();
+      System.out.println("  text in element in lower case: '" + textInElementInLowerCase + "'");
+      if (!textInElementInLowerCase.contains(wordInLowerCase)) {
+        throw new AssertionError("Текст текущего элемента не содержит слово '" + wordInLowerCase + "'");
       }
     }
   }

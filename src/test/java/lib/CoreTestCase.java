@@ -25,7 +25,7 @@ public class CoreTestCase extends TestCase {
   protected void tearDown() throws Exception {
     System.out.print("\n\n***** Метод tearDown() *****\n");
     this.rotateScreenPortrait();
-    System.out.println("Вызываем метод quit()");
+    System.out.println("\nВызываем метод quit()");
     driver.quit();
     super.tearDown();
   }
@@ -36,7 +36,7 @@ public class CoreTestCase extends TestCase {
       AppiumDriver driver = (AppiumDriver) this.driver;
       driver.rotate(ScreenOrientation.PORTRAIT);
     } else {
-      System.out.println("Method rotateScreenPortrait() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+      System.out.println("  Method rotateScreenPortrait() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
     }
   }
 
@@ -46,7 +46,7 @@ public class CoreTestCase extends TestCase {
       AppiumDriver driver = (AppiumDriver) this.driver;
       driver.rotate(ScreenOrientation.LANDSCAPE);
     } else {
-      System.out.println("Method rotateScreenLandscape() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+      System.out.println("  Method rotateScreenLandscape() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
     }
   }
 
@@ -57,16 +57,18 @@ public class CoreTestCase extends TestCase {
       AppiumDriver driver = (AppiumDriver) this.driver;
       driver.runAppInBackground(Duration.ofSeconds(seconds));
     } else {
-      System.out.println("Method backgroundApp() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+      System.out.println("  Method backgroundApp() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
     }
   }
 
   protected void openWikiWebPageForMobileWeb() {
     System.out.println("\nOpen Wiki Web Page For Mobile Web");
     if (Platform.getInstance().isMobileWeb()) {
-      driver.get("https://en.m.wikipedia.org");
+      final String url = "https://en.m.wikipedia.org";
+      System.out.println("\nOpen url: '" + url + "'");
+      driver.get(url);
     } else {
-      System.out.println("Method openWikiWebPageForMobileWeb() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
+      System.out.println("\nMethod openWikiWebPageForMobileWeb() does nothing for platform: '" + Platform.getInstance().getPlatformVar() + "'");
     }
   }
 
