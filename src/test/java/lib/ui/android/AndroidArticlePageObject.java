@@ -17,6 +17,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
     CLOSE_ARTICLE_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']/*[@class='android.widget.ImageButton']";
     LISTS_CONTAINER = "xpath://*[@resource-id='org.wikipedia:id/lists_container']";
     FOLDER_BY_NAME_TEMPLATE = "xpath://*[@text='{FOLDER_NAME}']";
+    EDIT_ARTICLE_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/view_page_header_edit_pencil']";
   }
 
   public AndroidArticlePageObject(RemoteWebDriver driver) {

@@ -63,7 +63,7 @@ public class MyListsTests extends CoreTestCase {
     System.out.print("\n\n***** Тестовый метод testSaveTwoArticles() *****\n");
 
     final String searchLine1 = "Java";
-    final String searchLine2 = "Appium";
+    final String searchLine2 = "Kotlin";
     final String nameOfFolder = "Learning programming";
 
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
@@ -74,24 +74,37 @@ public class MyListsTests extends CoreTestCase {
     ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
     articlePageObject.waitForTitleElement();
     String article_title_1 = articlePageObject.getArticleTitle();
+
     if (Platform.getInstance().isAndroid()) {
       articlePageObject.addArticleToNewList(nameOfFolder);
     } else {
       articlePageObject.addArticlesToMySaved();
     }
+
+    if (Platform.getInstance().isMobileWeb()) {
+      AuthorisationPageObject auth = new AuthorisationPageObject(driver);
+      auth.clickAuthButton();
+      auth.enterLoginData(login, password);
+      auth.submitForm();
+
+      articlePageObject.waitForTitleElement();
+      assertEquals("We are not on the same page after login", article_title_1, articlePageObject.getArticleTitle());
+      articlePageObject.addArticlesToMySaved();
+    }
+
     articlePageObject.closeArticle();
 
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine(searchLine2);
-    searchPageObject.clickByArticleWithSubstring("Appium");
+    searchPageObject.clickByArticleWithSubstring("rogramming language");
 
-    String article_title_2;
-    if (Platform.getInstance().isAndroid()) {
+    final String article_title_2;
+    if (Platform.getInstance().isAndroid() || Platform.getInstance().isMobileWeb()) {
       articlePageObject.waitForTitleElement();
       article_title_2 = articlePageObject.getArticleTitle();
     } else {
-      articlePageObject.waitForIOSTitle("Appium");
-      article_title_2 = articlePageObject.getArticleIOSTitle("Appium");
+      articlePageObject.waitForIOSTitle("Kotlin");
+      article_title_2 = articlePageObject.getArticleIOSTitle("Kotlin");
     }
 
     if (Platform.getInstance().isAndroid()) {
@@ -99,9 +112,11 @@ public class MyListsTests extends CoreTestCase {
     } else {
       articlePageObject.addArticlesToMySaved();
     }
+
     articlePageObject.closeArticle();
 
     NavigationUI navigationUI = NavigationUIFactory.get(driver);
+    navigationUI.openNavigation();
     navigationUI.clickMyList();
 
     MyListsPageObject listsPageObject = MyListsPageObjectFactory.get(driver);
@@ -111,12 +126,13 @@ public class MyListsTests extends CoreTestCase {
     listsPageObject.swipeByArticleToDelete(article_title_1);
 
     listsPageObject.openArticleByTitle(article_title_2);
+    articlePageObject.waitForEditArticleButtonToAppear();
 
-    String article_title_2_after_delete;
-    if (Platform.getInstance().isAndroid()) {
+    final String article_title_2_after_delete;
+    if (Platform.getInstance().isAndroid() || Platform.getInstance().isMobileWeb()) {
       article_title_2_after_delete = articlePageObject.getArticleTitle();
     } else {
-      article_title_2_after_delete = articlePageObject.getArticleIOSTitle("Appium");
+      article_title_2_after_delete = articlePageObject.getArticleIOSTitle("Kotlin");
     }
 
     assertEquals("Article title has been changed", article_title_2, article_title_2_after_delete);

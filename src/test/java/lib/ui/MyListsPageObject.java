@@ -75,12 +75,13 @@ abstract public class MyListsPageObject extends MainPageObject {
     this.waitForArticleToDisappearByTitle(articleTitle);
   }
 
-  public void openArticleByTitle(String articleTitle) {
+  public void openArticleByTitle(String articleTitle) throws InterruptedException {
     System.out.println("\nOpen Article By Title");
     System.out.println("  articleTitle: '" + articleTitle + "'");
     this.waitForArticleToAppearByTitle(articleTitle);
     String articleLocatorWithType = getSavedArticleXpathByTitle(articleTitle);
     System.out.println();
+    Thread.sleep(2_000L);
     this.waitForElementAndClick(articleLocatorWithType, "Can not click on article with title '" + articleTitle + "'", 5);
   }
 }

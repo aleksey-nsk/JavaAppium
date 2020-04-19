@@ -20,6 +20,7 @@ abstract public class ArticlePageObject extends MainPageObject {
   protected static String CLOSE_ARTICLE_BUTTON;
   protected static String LISTS_CONTAINER;
   protected static String FOLDER_BY_NAME_TEMPLATE;
+  protected static String EDIT_ARTICLE_BUTTON;
 
   public ArticlePageObject(RemoteWebDriver driver) {
     super(driver);
@@ -142,5 +143,10 @@ abstract public class ArticlePageObject extends MainPageObject {
   public void assertTitlePresentWithoutWait() {
     System.out.println("\nAssert Title Present Without Wait");
     this.assertElementPresent(TITLE, "This article has not got element title");
+  }
+
+  public void waitForEditArticleButtonToAppear() {
+    System.out.println("\nWait For Edit Article Button To Appear");
+    this.waitForElementPresent(EDIT_ARTICLE_BUTTON, "Can not find edit article button", 5);
   }
 }

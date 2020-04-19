@@ -10,6 +10,7 @@ public class MWArticlePageObject extends ArticlePageObject {
     FOOTER_ELEMENT = "css:footer.minerva-footer";
     OPTION_ADD_ARTICLE_TO_LIST = "xpath://li[@id='page-actions-watch']/a[@id='ca-watch' and contains(@class, 'mw-ui-icon-wikimedia-star-base20')]";
     OPTION_REMOVE_FROM_LIST_BUTTON = "xpath://li[@id='page-actions-watch']/a[@id='ca-watch' and contains(@class, 'watched')]";
+    EDIT_ARTICLE_BUTTON = "css:a#ca-edit";
   }
 
   public MWArticlePageObject(RemoteWebDriver driver) {
