@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class SearchTests extends CoreTestCase {
   }
 
   @Test
-  public void testSearchByTitleAndDescription() {
+  public void testSearchByTitleAndDescription() throws InterruptedException {
     System.out.print("\n\n***** Тестовый метод testSearchByTitleAndDescription() *****\n");
 
     final String searchLine = "Java";
@@ -79,6 +80,14 @@ public class SearchTests extends CoreTestCase {
     SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
     searchPageObject.initSearchInput();
     searchPageObject.typeSearchLine(searchLine);
+
+    // Тесты для mobile web работают слишком быстро.
+    // Ставлю паузу чтобы успеть увидеть "глазами"
+    if (Platform.getInstance().isMobileWeb()) {
+      System.out.println("\nПауза для mobile web 5 секунд ...");
+      Thread.sleep(5_000L);
+    }
+
     searchPageObject.waitForElementByTitleAndDescription(title1, description1);
     searchPageObject.waitForElementByTitleAndDescription(title2, description2);
     searchPageObject.waitForElementByTitleAndDescription(title3, description3);
